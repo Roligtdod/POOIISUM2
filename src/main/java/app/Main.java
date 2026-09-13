@@ -1,4 +1,4 @@
-package Maxi;
+package app;
 
 import model.Pedido;
 import model.Repartidor;
