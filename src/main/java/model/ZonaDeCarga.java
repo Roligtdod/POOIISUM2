@@ -1,12 +1,15 @@
 package model;
 
+import javax.swing.text.html.BlockView;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ZonaDeCarga {
     private final LinkedBlockingQueue<Pedido> colaPedidos;
     private final ReentrantLock lock;
+
 
     public ZonaDeCarga(){
         colaPedidos = new LinkedBlockingQueue<>(); //Cola de prioridad, al tener todos los objetos la misma prioridad (0) usa sistema FIFO (Fist in, first out), cambie de priority a linked por lo mismo c:
@@ -37,6 +40,15 @@ public class ZonaDeCarga {
         }
     }
 
+    public synchronized List<Pedido> listaPedidos(){
+        lock.lock();
+        try{
+        return new ArrayList<>(colaPedidos);
+        }finally{
+            lock.unlock();
+        }
+    }
+
 
     public static synchronized void mostrarPedidos(String titulo, String texto){ //Investigue porque al momento de ejecutar todo al mismo tiempo salia texto de forama algo desordenada, con esto logre dejarlo ordenado
         System.out.println();
@@ -47,5 +59,6 @@ public class ZonaDeCarga {
         System.out.println("===========================================");
 
     }
+
 
 }

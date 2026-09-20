@@ -1,6 +1,6 @@
 package interfaz;
 
-public interface Runnable {
+public interface Runnable extends java.lang.Runnable {
     void run();
 
 }

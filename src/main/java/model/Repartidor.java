@@ -1,14 +1,22 @@
 package model;
 
 
-public class Repartidor implements Runnable {
-    private final ZonaDeCarga zonaDeCarga;
-    private final String nombre;
+import interfaz.GUI;
 
-    public Repartidor(ZonaDeCarga zonaDeCarga, String nombre){
+public class Repartidor implements Runnable{
+    private  ZonaDeCarga zonaDeCarga;
+    private  String nombre;
+    private GUI gui;
+
+
+    public Repartidor(ZonaDeCarga zonaDeCarga, String nombre, GUI gui){
         this.zonaDeCarga = zonaDeCarga;
         this.nombre = nombre;
+        this.gui = gui;
     }
+
+
+
 
     @Override
     public void run() {
@@ -16,18 +24,15 @@ public class Repartidor implements Runnable {
         while((pedido = zonaDeCarga.retirarPedido()) != null){ //Asigna valor a "pedido" y compara que tenga algo disponible, en caso de que no envia mensaje de despacho finalizado de abajo
             // como retirarPedido elimina con poll el valor siempre seguira el que viene en la lista
             pedido.setEstado(estadoPedidos.EN_REPARTO);
-            zonaDeCarga.mostrarPedidos("Retiro del pedido",
-                    "Repartidor " + nombre + "\n" +
-                            "Numero del pedido #" + pedido.getId() + "\n" +
-                            "Direccion de entrega " + pedido.getDireccion() + "\n"
-                            +"Estado del pedido " + pedido.getEstado()); //este metodo está explicado en ZonaDeCarga
+            gui.mostrarTexto(nombre + " está repartiendo el pedido #" + pedido.getId() +"\n");
+
             try {
                 Thread.sleep(5000); // puede cambiarlo si le parece mucho
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             pedido.setEstado(estadoPedidos.ENTREGADO);
-            System.out.println(nombre + " finalizo la entrega de :" + pedido); // profe, aca podria haber usado zonaDeCarga.MostrarPedidos() como antes pero preferi usar el toString porque esta en la pauta
+           gui.mostrarTexto(nombre + " Termino la entrega del pedido #" + pedido.getId() +"\n");
             try { // Este ultimo Try es para que sea mas facil de leer en consola los resultados,
                 // si lo eliminamos funciona todo igual, pero asi no pasa todo rapido PD: <- no se porque al escribir "todo" se pone de otro color, asumo que una palabra reservada para comentarios ajja
                 Thread.sleep(500);
@@ -41,10 +46,12 @@ public class Repartidor implements Runnable {
         }catch (InterruptedException e){
             throw new RuntimeException(e);
         }
-        System.out.println("\n---------------------------------------------");
-        System.out.println(nombre + " Finaliza de despachar debido a que no quedan pedidos pendientes");
-        System.out.println("\n---------------------------------------------\n");
+        gui.mostrarTexto(" No quedan más despachos disponibles para asignar a repartidor " + nombre + "\n");
     }
 
+    public String cadenaTexto(String nombre, String contenido){
+        return nombre;
+
+    }
 
 }
