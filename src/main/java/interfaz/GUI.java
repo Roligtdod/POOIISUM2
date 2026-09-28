@@ -210,6 +210,6 @@ public class GUI {
             JOptionPane .showMessageDialog(null, "Error al registrar el pedido");
         }
 
-    }
+    } //Registra pedido
 
 }
