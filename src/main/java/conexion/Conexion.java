@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 public class Conexion {
     private static String url = "jdbc:mysql://localhost:3306/speedfast?createDatabaseIfNotExist=true";
     private static String user = "root";
-    private static String password = "maxito22";
+    private static String password = "";
     private static String driver = "com.mysql.cj.jdbc.Driver";
 
 
